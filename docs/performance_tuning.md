@@ -90,6 +90,12 @@ docker run --rm -d --cpuset-cpus 0,1,2,3 -v <model_path>:/opt/model -p 9001:9001
 
 ```
 
+## CPU Power Management Settings
+In order to save power, the OS can decrease the CPU frequency and increase a volatility of the latency values. Similarly the Intel® Turbo Boost Technolog may also affect the stability of results. For best reproducibility, consider locking the frequency to the processor base frequency (refer to the https://ark.intel.com/ for your specific CPU). For example, in Linux setting the releveant values for the /sys/devices/system/cpu/cpu* entries does the trick. [Read more](https://docs.openvino.ai/nightly/openvino_docs_optimization_guide_dldt_optimization_guide.html). High-level commands like cpupower also exists:
+```
+$ cpupower frequency-set --min 3.1GHz
+```
+
 ## Tuning Model Server configuration parameters           
 
 OpenVINO Model Server in C++ implementation is using scalable multithreaded gRPC and REST interface, however in some hardware configuration it might become a bottleneck for high performance backend with OpenVINO.
