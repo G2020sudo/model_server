@@ -10,7 +10,7 @@ OpenVINO&trade; Model Server can be tuned to a single client use case or a high 
 execution streams. They split the available resources to perform parallel execution of multiple requests.
 It is particularly efficient for models which can not consume effectively all CPU cores or for CPUs with high number of cores.
 
-By default, OpenVINO Model Server sets the value CPU_THROUGHPUT_AUTO. It calculates the number of streams based on number of
+By default, for `CPU` target device, OpenVINO Model Server sets the value CPU_THROUGHPUT_AUTO and GPU_THROUGHTPUT_AUTO for `GPU` target device. It calculates the number of streams based on number of
 available vCPUs. It gives a compromise between the single client scenario and the high concurrency.
 
 If this default configuration is not suitable, adjust it with the parameter `CPU_THROUGHPUT_STREAMS` defined as part 
@@ -28,6 +28,25 @@ For example with ~50 clients sending the requests to the server with 48 cores, s
 
 `--plugin_config '{"CPU_THROUGHPUT_STREAMS": "24"}'`
 
+
+## Performance Hints
+The `PERFORMANCE_HINT` plugin config property enables you to specify a performance mode for the plugin to be more efficient for particular use cases.
+
+#### THROUGHPUT
+This mode prioritizes high throughput, balancing between latency and power. It is best suited for tasks involving multiple jobs, like inference of video feeds or large numbers of images.
+
+#### LATENCY
+This mode prioritizes low latency, providing short response time for each inference job. It performs best for tasks where inference is required for a single input image, like a medical analysis of an ultrasound scan image. It also fits the tasks of real-time or nearly real-time applications, such as an industrial robot's response to actions in its environment or obstacle avoidance for autonomous vehicles.
+Note that currently the `PERFORMANCE_HINT` property is supported by CPU and GPU devices only. [More information](https://github.com/openvinotoolkit/openvino/blob/928076ed319fcf172d24d1af4c6844e39c1bc100/docs/OV_Runtime_UG/auto_device_selection.md).
+
+To enable Performance Hints for your application, use the following command:
+```
+docker run --rm -d -v <model_path>:/opt/model -p 9001:9001 openvino/model_server:latest \
+--model_path /opt/model --model_name my_model --port 9001 \
+--plugin_config '{"PERFORMANCE_HINT": "THROUGHTPUT"}'
+```
+
+> NOTE: CPU_THROUGHPUT_STREAMS and PERFORMANCE_HINT should not be used together.
 
 ## Input data in REST API calls
 
