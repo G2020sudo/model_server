@@ -1,0 +1,14 @@
+{
+  "model_config_list":[
+    {
+      "config":{
+        "name":"efficientnet-b0",
+        "base_path":"/intel_optimized_models/model_server/classification/FP32",
+        "nireq": 1,
+	"batch_size":"1",
+        "target_device": "CPU",
+ 	"layout": "NHWC"
+      }
+    }
+  ]
+}

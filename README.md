@@ -27,6 +27,19 @@
 
 ![OVMS picture](docs/ovms.png)
 
+This is a fork to demonstrate classification for efficientnet-b0 model. 
+
+
+To build this demo execute: docker build -f ./Dockerfile.ubuntu.classification-demo -t ovms-classification:1.0 .
+
+
+To start the Model Server execute: docker run -p 9000:9000 ovms-classification:1.0
+Note that this will load all the models specified in intel_optimized_models/model_server/config.json
+
+To test the Model Server execute: docker run --entrypoint "/bin/bash" --net host ovms-classification:1.0 -c "cd /example_client && python3 grpc_binary_client.py --grpc_port 9000 --input_name sub/placeholder_port_0 --output_name efficientnet-b0/model/head/dense/BiasAdd/Add --model_name efficientnet-b0 --batchsize 1"
+
+
+
 OpenVINO&trade; Model Server (OVMS) is a high-performance system for serving machine learning models. It is based on C++ for high scalability 
 and optimized for Intel solutions, so that you can take advantage of all the power of the Intel® Xeon® processor or Intel’s AI accelerators 
 and expose it over a network interface. OVMS uses the same architecture and API as [TensorFlow Serving](https://github.com/tensorflow/serving), 
