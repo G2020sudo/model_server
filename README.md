@@ -3,14 +3,25 @@
 This is a fork to demonstrate classification for efficientnet-b0 model. 
 
 
-To build this demo execute: docker build -f ./Dockerfile.ubuntu.classification-demo -t ovms-classification:1.0 .
+To build this demo execute: 
+
+docker build -f ./Dockerfile.ubuntu.classification-21.4-demo -t ovms-classification-cpu_gpu:21.4 .
+
+docker build -f ./Dockerfile.ubuntu.classification-22.1-demo -t ovms-classification-cpu_gpu:22.1 .
 
 
-To start the Model Server execute: docker run -p 9000:9000 ovms-classification:1.0
+
+To start the Model Server execute: 
+
+docker run -p 9000:9000 ovms-classification-cpu_gpu:21.4
+
+or
+
+docker run -p 9000:9000 ovms-classification-cpu_gpu:22.1
 
 Note that this will load all the models specified in intel_optimized_models/model_server/config.json. Please be sure to copy the IR bin and xml files in the patch noted in the config.json file.
 
-To test the Model Server execute: docker run --entrypoint "/bin/bash" --net host ovms-classification:1.0 -c "cd /example_client && python3 grpc_binary_client.py --grpc_port 9000 --input_name sub/placeholder_port_0 --output_name efficientnet-b0/model/head/dense/BiasAdd/Add --model_name efficientnet-b0 --batchsize 1"
+To test the Model Server execute: docker run --entrypoint "/bin/bash" --net host ovms-classification-cpu_gpu:21.4 -c "cd /example_client && python3 grpc_binary_client.py --grpc_port 9000 --input_name sub/placeholder_port_0 --output_name efficientnet-b0/model/head/dense/BiasAdd/Add --model_name efficientnet-b0 --batchsize 1"
 
 
 
