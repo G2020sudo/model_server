@@ -248,3 +248,11 @@ new_local_repository(
     path = "/opt/opencv",
 )
 ################## END OF OPENCV DEPENDENCY ##########
+
+# MQTT ########
+new_local_repository(
+    name = "mqtt",
+    build_file = "@//third_party/mqtt:BUILD",
+    path = "/usr/local",
+)
+# END OF MQTT #
