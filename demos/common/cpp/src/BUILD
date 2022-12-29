@@ -58,6 +58,7 @@ cc_binary(
         "@org_tensorflow//tensorflow/core:framework",
         "@org_tensorflow//tensorflow/core:lib",
         "@opencv//:opencv",
+	"@mqtt//:paho.mqtt.c",
     ]
 )
 

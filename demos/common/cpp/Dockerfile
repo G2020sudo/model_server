@@ -45,6 +45,7 @@ RUN apt update && apt install -y --no-install-recommends \
         zip \
         zlib1g-dev \
         python3-distutils \
+	libssl-dev \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -101,24 +102,31 @@ RUN bazel build \
     @com_github_grpc_grpc//:grpc++ \
     @com_google_protobuf//:protobuf_lite \
     @org_tensorflow//tensorflow/core:lib \
-    @opencv//:opencv
+    @opencv//:opencv \
+    @mqtt//:paho.mqtt.c
 
 COPY src/ /build/src/
 
+RUN pwd; ls -l /build/src
+RUN cd /build/src; curl -sSL https://github.com/eclipse/paho.mqtt.c/archive/v1.3.4.tar.gz | tar -xz; cd paho.mqtt.c-1.3.4; make install
+#RUN rm -rf paho.mqtt.c-1.3.4
+
 RUN bazel build //src:$CLIENT
 
-FROM ubuntu:20.04 as release
-ENV DEBIAN_FRONTEND=noninteractive 
-RUN apt update && apt install -y --no-install-recommends \
-        libtbb-dev
+#FROM ubuntu:20.04 as release
+#ENV DEBIAN_FRONTEND=noninteractive 
+#RUN apt update && apt install -y --no-install-recommends \
+#        libtbb-dev
 
-WORKDIR /clients/
+#WORKDIR /clients/
 
-RUN mkdir -p /clients/libs/ && mkdir -p /clients/images
-COPY --from=base_build \
-    /build/bazel-bin/src \
-    /clients
-COPY --from=base_build /input/images/*.jpeg /clients/images/
-COPY --from=base_build /input/input_images.txt /clients/
-COPY --from=base_build /usr/lib/x86_64-linux-gnu/libpng* /lib/x86_64-linux-gnu/
-COPY --from=base_build /opt/opencv/lib/* /lib/x86_64-linux-gnu/
+#RUN mkdir -p /clients/libs/ && mkdir -p /clients/images
+#COPY --from=base_build \
+#    /build/bazel-bin/src \
+#    /clients
+#COPY --from=base_build /input/images/*.jpeg /clients/images/
+#COPY --from=base_build /input/input_images.txt /clients/
+#COPY --from=base_build /usr/lib/x86_64-linux-gnu/libpng* /lib/x86_64-linux-gnu/
+#COPY --from=base_build /opt/opencv/lib/* /lib/x86_64-linux-gnu/
+#COPY --from=base_build /build/src/paho.mqtt.c-1.3.4 /paho
+#RUN ls -l /paho
