@@ -1,4 +1,5 @@
--D BUILD_LIST=core,improc,imgcodecs \
+-D VIDEOIO_PLUGIN_LIST=gstreamer \
+-D WITH_GSTREAMER=ON \
 -D CMAKE_BUILD_TYPE=Release \
 -D CMAKE_INSTALL_PREFIX=/opt/opencv \
 -D OPENCV_LIB_INSTALL_PATH=lib
