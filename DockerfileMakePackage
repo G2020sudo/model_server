@@ -33,6 +33,7 @@ RUN mkdir -vp /ovms_release/deps
 RUN mkdir -vp /ovms_release/lib
 RUN mkdir -vp /ovms_release/lib/hddl/config
 RUN mkdir -vp /ovms_release/lib/custom_nodes
+RUN mkdir -vp /ovms_release/include
 
 RUN if [ -d /ovms/src/custom_nodes/lib/${BASE_OS} ] ; then true ; else exit 0 ; fi ; cp /ovms/src/custom_nodes/lib/${BASE_OS}/*.so /ovms_release/lib/custom_nodes/
 RUN cp /ovms/metadata.json /ovms_release/
@@ -70,6 +71,7 @@ RUN find /opt/intel/openvino/runtime/lib/intel64/ -iname '*.mvcmd*' -exec cp -v 
 RUN if [ -d /opt/intel/openvino/runtime/3rdparty ] ; then find /opt/intel/openvino/runtime/3rdparty/ -iname '*.so*' -exec cp -vP {} /ovms_release/lib/ \;; fi
 RUN find /opt/opencv/lib/ -iname '*.so*' -exec cp -vP {} /ovms_release/lib/ \;
 RUN cp /opt/opencv/share/licenses/opencv4/* /ovms/release_files/thirdparty-licenses/
+RUN cp -R /opt/opencv/include/opencv4/opencv2 /ovms_release/include
 RUN if [ "$ov_use_binary" == "1" ] ; then true ; else exit 0 ; fi ; if [ -f /opt/intel/openvino/docs/licensing/EULA.txt ] ; then true ; else exit 0; fi ; cp /opt/intel/openvino/docs/licensing/EULA.txt /ovms/release_files/thirdparty-licenses/openvino.LICENSE.txt;
 RUN if [ "$ov_use_binary" == "0" ] ; then true ; else exit 0 ; fi ; cp /openvino/LICENSE /ovms/release_files/thirdparty-licenses/openvino.LICENSE.txt;
 
