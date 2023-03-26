@@ -26,10 +26,24 @@
 
 namespace ovms {
 const char* CPUSET_FILENAME = "/sys/fs/cgroup/cpuset/cpuset.cpus";
+// Ubuntu 22.04 LTS changed CPUSET path
+const char* CPUSET_FILENAME22 = "/sys/fs/cgroup/cpuset.cpus.effective";
+    
 uint16_t getCoreCount() {
     std::ifstream fs;
-    uint16_t coreCount = 1;
-    auto status = getCPUSetFile(fs, CPUSET_FILENAME);
+    uint16_t coreCount = 1;    
+    std::string fileName(CPUSET_FILENAME);
+    FILE *file = fopen(CPUSET_FILENAME, "r");
+    
+    if (!file) {
+      fileName = CPUSET_FILENAME22;
+      file = fopen(CPUSET_FILENAME22, "r");
+    }
+    if (file)
+      fclose(file); 
+    
+    // below throws a segfault on ubuntu 22.04 LTS when using CPUSEt_FILENAME
+    auto status = getCPUSetFile(fs, fileName.c_str());
     if (status.ok()) {
         std::string cpusets;
         fs >> cpusets;
