@@ -144,10 +144,8 @@ ENV TEST_LOG="/root/.cache/bazel/_bazel_root/bc57d4817a53cab8c785464da57d1983/ex
 # Build OpenVINO and nGraph (OV dependency) with D_GLIBCXX_USE_CXX11_ABI=0 or 1
 
 # hadolint ignore=DL3003
-# https://github.com/openvinotoolkit/openvino 
-ov_git=https://github.com/gsilva2016/openvino.git
-
-RUN if [ "$ov_use_binary" == "0" ] ; then true ; else exit 0 ; fi ; git clone $ov_git /openvino && cd /openvino && git checkout $ov_source_branch && git submodule update --init --recursive
+# ov_git=https://github.com/openvinotoolkit/openvino 
+RUN if [ "$ov_use_binary" == "0" ] ; then true ; else exit 0 ; fi ; ov_git=https://github.com/gsilva2016/openvino.git; git clone $ov_git /openvino && cd /openvino && git checkout $ov_source_branch && git submodule update --init --recursive
 WORKDIR /openvino/build
 RUN if [ "$ov_use_binary" == "0" ] ; then true ; else exit 0 ; fi ; cmake -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -DENABLE_SAMPLES=0 -DNGRAPH_USE_CXX_ABI=1 -DCMAKE_CXX_FLAGS=" -D_GLIBCXX_USE_CXX11_ABI=1 -Wno-error=parentheses "  ..
 RUN if [ "$ov_use_binary" == "0" ] ; then true ; else exit 0 ; fi ; make --jobs=$JOBS
