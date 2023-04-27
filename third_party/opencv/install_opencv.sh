@@ -42,7 +42,7 @@ fi
 
 if [ "$os" == "ubuntu20.04" ] ; then
     export DEBIAN_FRONTEND=noninteractive
-    apt update && apt install -y build-essential git cmake libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-x \
+    apt update && apt install -y build-essential git cmake libgtk2.0-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-x \
         && rm -rf /var/lib/apt/lists/*
 elif [ "$os" == "rhel8" ] ; then
     yum install -d6 -y git cmake gcc-c++
